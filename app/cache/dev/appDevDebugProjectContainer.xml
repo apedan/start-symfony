@@ -16,7 +16,8 @@
       <parameter key="AsseticBundle">Symfony\Bundle\AsseticBundle\AsseticBundle</parameter>
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
-      <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
+      <parameter key="GBookBundle">Learn\Bundle\GBookBundle\GBookBundle</parameter>
+      <parameter key="BcBootstrapBundle">Bc\Bundle\BootstrapBundle\BcBootstrapBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
       <parameter key="SensioGeneratorBundle">Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle</parameter>
@@ -298,6 +299,7 @@
     <parameter key="twig.exception_listener.controller">twig.controller.exception:showAction</parameter>
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
+      <parameter>BcBootstrapBundle:Form:form_div_layout.html.twig</parameter>
     </parameter>
     <parameter key="debug.templating.engine.twig.class">Symfony\Bundle\TwigBundle\Debug\TimedTwigEngine</parameter>
     <parameter key="twig.options" type="collection">
@@ -399,6 +401,11 @@
     <parameter key="assetic.node.bin">/usr/bin/node</parameter>
     <parameter key="assetic.ruby.bin">/usr/bin/ruby</parameter>
     <parameter key="assetic.sass.bin">/usr/bin/sass</parameter>
+    <parameter key="assetic.filter.lessphp.class">Assetic\Filter\LessphpFilter</parameter>
+    <parameter key="assetic.filter.lessphp.presets" type="collection"/>
+    <parameter key="assetic.filter.lessphp.paths" type="collection"/>
+    <parameter key="assetic.filter.lessphp.formatter">null</parameter>
+    <parameter key="assetic.filter.lessphp.preserve_comments">null</parameter>
     <parameter key="assetic.filter.cssrewrite.class">Assetic\Filter\CssRewriteFilter</parameter>
     <parameter key="assetic.twig_extension.functions" type="collection"/>
     <parameter key="assetic.controller.class">Symfony\Bundle\AsseticBundle\Controller\AsseticController</parameter>
@@ -578,14 +585,6 @@
         <argument type="collection">
           <argument>assetic.request_listener</argument>
           <argument>onKernelRequest</argument>
-        </argument>
-        <argument>0</argument>
-      </call>
-      <call method="addListenerService">
-        <argument>kernel.controller</argument>
-        <argument type="collection">
-          <argument>acme.demo.listener</argument>
-          <argument>onKernelController</argument>
         </argument>
         <argument>0</argument>
       </call>
@@ -1963,6 +1962,7 @@
                   <service class="Symfony\Bridge\Twig\Form\TwigRendererEngine" public="false">
                     <argument type="collection">
                       <argument>form_div_layout.html.twig</argument>
+                      <argument>BcBootstrapBundle:Form:form_div_layout.html.twig</argument>
                     </argument>
                   </service>
                 </argument>
@@ -2001,7 +2001,13 @@
         </argument>
       </call>
       <call method="addExtension">
-        <argument type="service" id="twig.extension.acme.demo"/>
+        <argument type="service" id="bc_bootstrap.twig.icon_extension"/>
+      </call>
+      <call method="addExtension">
+        <argument type="service" id="bc_bootstrap.twig.label_extension"/>
+      </call>
+      <call method="addExtension">
+        <argument type="service" id="bc_bootstrap.twig.badge_extension"/>
       </call>
       <call method="addGlobal">
         <argument>app</argument>
@@ -2051,12 +2057,18 @@
     <service id="assetic.filter_manager" class="Symfony\Bundle\AsseticBundle\FilterManager">
       <argument type="service" id="service_container"/>
       <argument type="collection">
+        <argument key="lessphp">assetic.filter.lessphp</argument>
         <argument key="cssrewrite">assetic.filter.cssrewrite</argument>
       </argument>
     </service>
     <service id="assetic.asset_manager" class="Assetic\Factory\LazyAssetManager">
       <argument type="service" id="assetic.asset_factory"/>
       <argument type="collection">
+        <argument key="config" type="service">
+          <service class="Symfony\Bundle\AsseticBundle\Factory\Loader\ConfigurationLoader" public="false">
+            <tag name="assetic.formula_loader" alias="config"/>
+          </service>
+        </argument>
         <argument key="twig" type="service">
           <service class="Assetic\Factory\Loader\CachedFormulaLoader" public="false">
             <tag name="assetic.formula_loader" alias="twig"/>
@@ -2076,6 +2088,59 @@
           </service>
         </argument>
       </argument>
+      <call method="addResource">
+        <argument type="service">
+          <service class="Symfony\Bundle\AsseticBundle\Factory\Resource\ConfigurationResource" public="false">
+            <tag name="assetic.formula_resource" loader="config"/>
+            <argument type="collection">
+              <argument key="bootstrap_css" type="collection">
+                <argument type="collection">
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/less/bootstrap.less</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/less/responsive.less</argument>
+                </argument>
+                <argument type="collection">
+                  <argument>lessphp</argument>
+                  <argument>cssrewrite</argument>
+                </argument>
+                <argument type="collection">
+                  <argument key="output">/css/bootstrap.css</argument>
+                </argument>
+              </argument>
+              <argument key="bootstrap_js" type="collection">
+                <argument type="collection">
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-transition.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-alert.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-button.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-carousel.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-collapse.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-dropdown.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-modal.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-tooltip.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-popover.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-scrollspy.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-tab.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-typeahead.js</argument>
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/twbs/bootstrap/js/bootstrap-affix.js</argument>
+                </argument>
+                <argument type="collection"/>
+                <argument type="collection">
+                  <argument key="output">/js/bootstrap.js</argument>
+                </argument>
+              </argument>
+              <argument key="jquery" type="collection">
+                <argument type="collection">
+                  <argument>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/jquery/jquery/jquery-1.9.1.js</argument>
+                </argument>
+                <argument type="collection"/>
+                <argument type="collection">
+                  <argument key="output">/js/jquery.js</argument>
+                </argument>
+              </argument>
+            </argument>
+          </service>
+        </argument>
+        <argument>config</argument>
+      </call>
       <call method="addResource">
         <argument type="service">
           <service class="Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource" public="false">
@@ -2100,6 +2165,15 @@
       <argument>true</argument>
       <call method="addWorker">
         <argument type="service">
+          <service class="Assetic\Factory\Worker\EnsureFilterWorker" public="false">
+            <tag name="assetic.factory_worker"/>
+            <argument>/\.less$/</argument>
+            <argument type="service" id="assetic.filter.lessphp"/>
+          </service>
+        </argument>
+      </call>
+      <call method="addWorker">
+        <argument type="service">
           <service class="Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker" public="false">
             <tag name="assetic.factory_worker"/>
           </service>
@@ -2108,6 +2182,22 @@
     </service>
     <service id="assetic.value_supplier.default" class="Symfony\Bundle\AsseticBundle\DefaultValueSupplier" public="false">
       <argument type="service" id="service_container"/>
+    </service>
+    <service id="assetic.filter.lessphp" class="Assetic\Filter\LessphpFilter">
+      <tag name="assetic.filter" alias="lessphp"/>
+      <file>/home/demetrius/PhpstormProjects/guestbook/app/../vendor/leafo/lessphp/lessc.inc.php</file>
+      <call method="setPresets">
+        <argument type="collection"/>
+      </call>
+      <call method="setLoadPaths">
+        <argument type="collection"/>
+      </call>
+      <call method="setFormatter">
+        <argument>null</argument>
+      </call>
+      <call method="setPreserveComments">
+        <argument>null</argument>
+      </call>
     </service>
     <service id="assetic.filter.cssrewrite" class="Assetic\Filter\CssRewriteFilter">
       <tag name="assetic.filter" alias="cssrewrite"/>
@@ -2208,7 +2298,9 @@
       <argument type="service">
         <service class="Doctrine\ORM\Configuration" public="false">
           <call method="setEntityNamespaces">
-            <argument type="collection"/>
+            <argument type="collection">
+              <argument key="GBookBundle">Learn\Bundle\GBookBundle\Entity</argument>
+            </argument>
           </call>
           <call method="setMetadataCacheImpl">
             <argument type="service">
@@ -2239,7 +2331,19 @@
           </call>
           <call method="setMetadataDriverImpl">
             <argument type="service">
-              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false"/>
+              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false">
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+                      <argument type="service" id="annotation_reader"/>
+                      <argument type="collection">
+                        <argument>/home/demetrius/PhpstormProjects/guestbook/src/Learn/Bundle/GBookBundle/Entity</argument>
+                      </argument>
+                    </service>
+                  </argument>
+                  <argument>Learn\Bundle\GBookBundle\Entity</argument>
+                </call>
+              </service>
             </argument>
           </call>
           <call method="setProxyDir">
@@ -2303,13 +2407,14 @@
     <service id="sensio_framework_extra.cache.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener">
       <tag name="kernel.event_subscriber"/>
     </service>
-    <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
+    <service id="bc_bootstrap.twig.icon_extension" class="Bc\Bundle\BootstrapBundle\Twig\BootstrapIconExtension">
       <tag name="twig.extension"/>
-      <argument type="service" id="twig.loader"/>
     </service>
-    <service id="acme.demo.listener" class="Acme\DemoBundle\EventListener\ControllerListener">
-      <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController"/>
-      <argument type="service" id="twig.extension.acme.demo"/>
+    <service id="bc_bootstrap.twig.label_extension" class="Bc\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension">
+      <tag name="twig.extension"/>
+    </service>
+    <service id="bc_bootstrap.twig.badge_extension" class="Bc\Bundle\BootstrapBundle\Twig\BootstrapBadgeExtension">
+      <tag name="twig.extension"/>
     </service>
     <service id="web_profiler.controller.profiler" class="Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController">
       <argument type="service" id="router" on-invalid="null"/>
@@ -2629,8 +2734,12 @@
         <argument>Doctrine</argument>
       </call>
       <call method="addPath">
-        <argument>/home/demetrius/PhpstormProjects/guestbook/src/Acme/DemoBundle/Resources/views</argument>
-        <argument>AcmeDemo</argument>
+        <argument>/home/demetrius/PhpstormProjects/guestbook/src/Learn/Bundle/GBookBundle/Resources/views</argument>
+        <argument>GBook</argument>
+      </call>
+      <call method="addPath">
+        <argument>/home/demetrius/PhpstormProjects/guestbook/vendor/braincrafted/bootstrap-bundle/Bc/Bundle/BootstrapBundle/Resources/views</argument>
+        <argument>BcBootstrap</argument>
       </call>
       <call method="addPath">
         <argument>/home/demetrius/PhpstormProjects/guestbook/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views</argument>
