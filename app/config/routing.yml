@@ -1,0 +1,4 @@
+g_book:
+    resource: "@GBookBundle/Resources/config/routing.yml"
+    prefix:   /
+
