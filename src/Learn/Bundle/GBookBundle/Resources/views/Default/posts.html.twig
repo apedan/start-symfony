@@ -1,0 +1,15 @@
+<div>
+    {% for post in posts %}
+        <br/>
+        <div>
+            {{ post.theme }}
+        </div>
+        <div>
+            {{ post.text }}
+        </div>
+    {% else %}
+        <div>
+            Нет постов
+        </div>
+    {% endfor %}
+</div>

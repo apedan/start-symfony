@@ -1,6 +1,12 @@
 g_book_homepage:
-    pattern:  /hello/{name}
+    pattern:  /
     defaults: { _controller: GBookBundle:Default:index }
+
+g_book_posts:
+    pattern:  /posts
+    defaults: { _controller: GBookBundle:Default:posts }
+
 g_book_create_post:
     pattern:  /post/create
     defaults: { _controller: GBookBundle:Default:create }
+

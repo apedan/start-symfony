@@ -1,1 +1,6 @@
-Hello {{ name }}!
+{% extends 'GBookBundle::layout.html.twig' %}
+
+{% block content %}
+    {{ render_hinclude(controller('GBookBundle:Default:create', {})) }}
+    {{ render_hinclude(controller('GBookBundle:Default:posts', {})) }}
+{% endblock %}

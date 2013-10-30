@@ -16,8 +16,9 @@ class PostForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title');
+        $builder->add('theme');
         $builder->add('text', 'textarea');
+        $builder->add('submit', 'submit');
     }
 
     public function getName()
