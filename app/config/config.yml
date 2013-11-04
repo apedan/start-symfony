@@ -33,7 +33,7 @@ bc_bootstrap:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ ]
+    bundles:        [ GBookBundle ]
     #java: /usr/bin/java
     filters:
         lessphp:
