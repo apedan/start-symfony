@@ -2,4 +2,4 @@ _assetic:
     resource: .
     type: assetic
 _app:
-    resource: /home/demetrius/PhpstormProjects/guestbook/app/config/routing_dev.yml
+    resource: /home/apedan/projects/start-symfony/app/config/routing_dev.yml
