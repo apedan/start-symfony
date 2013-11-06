@@ -1,0 +1,14 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block title 'Categories' %}
+
+{% block content %}
+    {% for category in categories %}
+        <div>
+            {{ category.title }}
+        </div>
+        <br/>
+    {% endfor %}
+
+    <a href='{{ path('category_create') }}'>Add category</a>
+{% endblock %}

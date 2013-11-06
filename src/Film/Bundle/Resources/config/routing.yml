@@ -1,3 +1,24 @@
 film_homepage:
     pattern:  /films
     defaults: { _controller: FilmBundle:Film:films }
+film_create:
+    pattern:  /films/create
+    defaults: { _controller: FilmBundle:Film:create }
+actor_homepage:
+    pattern:  /actors
+    defaults: { _controller: FilmBundle:Actor:actors }
+actor_create:
+    pattern:  /actors/create
+    defaults: { _controller: FilmBundle:Actor:create }
+category_homepage:
+    pattern:  /categories
+    defaults: { _controller: FilmBundle:Category:categories }
+category_create:
+    pattern:  /categories/create
+    defaults: { _controller: FilmBundle:Category:create }
+genre_homepage:
+    pattern:  /genres
+    defaults: { _controller: FilmBundle:Genre:genres }
+genre_create:
+    pattern:  /genres/create
+    defaults: { _controller: FilmBundle:Genre:create }

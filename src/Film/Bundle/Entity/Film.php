@@ -82,8 +82,19 @@ class Film
 
 
     public function __construct() {
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
         $this->genres = new \Doctrine\Common\Collections\ArrayCollection();
         $this->actors = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function populate($data = array())
+    {
+        foreach ($data as $field => $value)
+        {
+            if(property_exists($this, $field))
+                $this->$field = $value;
+        }
     }
 
     /**

@@ -1,0 +1,14 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block title 'Genres' %}
+
+{% block content %}
+    {% for genre in genres %}
+        <div>
+            {{ genre.title }}
+        </div>
+        <br/>
+    {% endfor %}
+
+    <a href='{{ path('genre_create') }}'>Add genre</a>
+{% endblock %}

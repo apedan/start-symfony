@@ -1,5 +1,25 @@
 {% extends 'FilmBundle::layout.html.twig' %}
 
 {% block content %}
-    {{ films }}
+    <ul>
+    {% for film in films %}
+        <li>
+            <li>Title: {{ film.title }}</li>
+            <li>Description: {{ film.description }}</li>
+            <li>Category: {{ film.category.title }}</li>
+            <li>Genres:
+                {% for genre in film.genres %}
+                    <li>{{ genre.title }}</li>
+                {% endfor %}
+            </li>
+            <li>Actors:
+                {% for actor in film.actors %}
+                    <li>{{ actor.name }}</li>
+                {% endfor %}
+            </li>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href='{{ path('film_create') }}'>Add film</a>
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block title 'Actors' %}
+
+{% block content %}
+    {% for actor in actors %}
+        <div>
+            {{ actor.name }}
+            <br/>
+            {{ actor.birthDate|date("d.m.Y") }}
+        </div>
+        <br/>
+    {% endfor %}
+
+    <a href='{{ path('actor_create') }}'>Add actor</a>
+{% endblock %}

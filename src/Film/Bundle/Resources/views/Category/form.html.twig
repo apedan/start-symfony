@@ -1,0 +1,21 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block title 'Create category' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div>
+        {{ form_label(form.title) }}
+        {{ form_errors(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+
+    <div>
+        {{ form_widget(form.submit) }}
+    </div>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}

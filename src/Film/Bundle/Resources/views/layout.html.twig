@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
 {% endblock %}
 
-{% block title 'Guest Book' %}
+{% block title 'Films' %}
 
 {% block body %}
     {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -20,6 +20,10 @@
     {% block content_header %}
         <ul id="menu">
             {% block content_header_more %}
+                <li><a href='{{ path('film_homepage') }}'>Films</a></li>
+                <li><a href='{{ path('actor_homepage') }}'>Actors</a></li>
+                <li><a href='{{ path('category_homepage') }}'>Categories</a></li>
+                <li><a href='{{ path('genre_homepage') }}'>Genres</a></li>
             {% endblock %}
         </ul>
 

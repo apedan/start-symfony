@@ -1,0 +1,27 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block title 'Create actor' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div>
+        {{ form_label(form.name) }}
+        {{ form_errors(form.name) }}
+        {{ form_widget(form.name) }}
+    </div>
+
+    <div>
+        {{ form_label(form.birthDate) }}
+        {{ form_errors(form.birthDate) }}
+        {{ form_widget(form.birthDate) }}
+    </div>
+
+    <div>
+        {{ form_widget(form.submit) }}
+    </div>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}

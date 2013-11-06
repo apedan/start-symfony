@@ -1,0 +1,51 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block title 'Create film' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div>
+        {{ form_label(form.title) }}
+        {{ form_errors(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+
+    <div>
+        {{ form_label(form.description) }}
+        {{ form_errors(form.description) }}
+        {{ form_widget(form.description) }}
+    </div>
+
+    <div>
+        {{ form_label(form.category) }}
+        {{ form_errors(form.category) }}
+        {{ form_widget(form.category) }}
+    </div>
+
+    <div>
+        {{ form_label(form.genres) }}
+        {{ form_errors(form.genres) }}
+        {{ form_widget(form.genres) }}
+    </div>
+
+    <div>
+        {{ form_label(form.actors) }}
+        {{ form_errors(form.actors) }}
+        {{ form_widget(form.actors) }}
+    </div>
+
+    <div>
+        {{ form_label(form.releaseAt) }}
+        {{ form_errors(form.releaseAt) }}
+        {{ form_widget(form.releaseAt) }}
+    </div>
+
+    <div>
+        {{ form_widget(form.submit) }}
+    </div>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
