@@ -5,18 +5,25 @@ namespace Film\Bundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Film\Bundle\Form\FilmForm;
 use Film\Bundle\Entity\Film;
+use Film\Bundle\FilmService;
 
 class FilmController extends Controller
 {
+    /**
+     * @return FilmService
+     */
+    protected  function getFilmService()
+    {
+        return $this->get('filmService');
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function filmsAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $films = $em->getRepository('Film\Bundle\Entity\Film')->findAll();
         return $this->render('FilmBundle:Film:films.html.twig', array(
-            'films' => $films,
+            'films' => $this->getFilmService()->getFilms(),
         ));
     }
 
@@ -51,6 +58,24 @@ class FilmController extends Controller
 
         return $this->render('FilmBundle:Film:form.html.twig', array(
             'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function searchFilmsAction()
+    {
+        $requestParams = $this->getRequest()->query->all();
+        try{
+            $films = $this->getFilmService()->getFilmsByParams($requestParams);
+        }catch (\Exception $e){
+            $films = "Wrong query";
+        }
+
+        return $this->render('FilmBundle:Film:films.html.twig', array(
+            'params' => $requestParams,
+            'films' => $films,
         ));
     }
 }

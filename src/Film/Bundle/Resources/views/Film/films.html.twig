@@ -1,25 +1,41 @@
 {% extends 'FilmBundle::layout.html.twig' %}
 
 {% block content %}
-    <ul>
-    {% for film in films %}
-        <li>
-            <li>Title: {{ film.title }}</li>
-            <li>Description: {{ film.description }}</li>
-            <li>Category: {{ film.category.title }}</li>
-            <li>Genres:
-                {% for genre in film.genres %}
-                    <li>{{ genre.title }}</li>
-                {% endfor %}
-            </li>
-            <li>Actors:
-                {% for actor in film.actors %}
-                    <li>{{ actor.name }}</li>
-                {% endfor %}
-            </li>
-        </li>
-    {% endfor %}
-    </ul>
+    {% if films is iterable %}
+
+        {% if params.category is defined %}
+            <h2>Category: {{ params.category }}</h2>
+        {% endif %}
+
+        {% if films|length > 0 %}
+
+            <ul>
+            {% for film in films %}
+                <li>
+                    <li><a href='{{ path('film_search', {'id': film.id}) }}'>{{ film.title }}</a></li>
+                    <li>Description: {{ film.description }}</li>
+                    <li><a href='{{ path('film_search', {'category': film.category.id}) }}'>{{ film.category.title }}</a></li>
+                    <li>Genres:
+                        {% for genre in film.genres %}
+                            <li>{{ genre.title }}</li>
+                        {% endfor %}
+                    </li>
+                    <li>Actors:
+                        {% for actor in film.actors %}
+                            <li>{{ actor.name }}</li>
+                        {% endfor %}
+                    </li>
+                </li>
+            {% endfor %}
+            </ul>
+
+        {% else %}
+            <div>Have no results</div>
+        {% endif %}
+
+    {% else %}
+        {{ films }}
+    {% endif %}
 
     <a href='{{ path('film_create') }}'>Add film</a>
 {% endblock %}

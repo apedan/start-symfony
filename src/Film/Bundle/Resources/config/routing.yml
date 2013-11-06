@@ -4,6 +4,9 @@ film_homepage:
 film_create:
     pattern:  /films/create
     defaults: { _controller: FilmBundle:Film:create }
+film_search:
+    pattern:  /search/films
+    defaults: { _controller: FilmBundle:Film:searchFilms }
 actor_homepage:
     pattern:  /actors
     defaults: { _controller: FilmBundle:Actor:actors }
