@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class FilmRepository extends EntityRepository
 {
+    public function getFilmsByParams(Array $params){
+        $query = $this->createQueryBuilder('f');
+        foreach ($params as $param => $value) {
+            $query->where(
+                $query->expr()->eq("f.$param", $value)
+            );
+        }
+        $query->orderBy('f.releaseAt', 'ASC');
+
+        return $query->getQuery()->getResult();
+    }
 }

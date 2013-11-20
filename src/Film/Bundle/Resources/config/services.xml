@@ -2,9 +2,19 @@
 <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="film.repository.class">Film\Bundle\Entity\FilmRepository</parameter>
+        <parameter key="film.entity.class">Film\Bundle\Entity\Film</parameter>
+        <parameter key="film.service.class">Film\Bundle\FilmService</parameter>
+    </parameters>
+
     <services>
-        <service id="film_service" class="Film\Bundle\FilmService">
-            <argument type="service" id="film" on-invalid="ignore" />
+        <service id="film.repository" class="%film.repository.class%" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+            <argument>%film.entity.class%</argument>
+        </service>
+        <service id="filmService" class="%film.service.class%">
+            <argument type="service" id="film.repository"/>
         </service>
     </services>
 </container>
