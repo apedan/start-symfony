@@ -19,7 +19,6 @@ class FilmRepository extends EntityRepository
                 $query->expr()->eq("f.$param", $value)
             );
         }
-        $query->orderBy('f.releaseAt', 'ASC');
 
         return $query->getQuery()->getResult();
     }
