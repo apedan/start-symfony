@@ -69,6 +69,7 @@ class appDevDebugProjectContainer extends Container
             'event_dispatcher' => 'getEventDispatcherService',
             'file_locator' => 'getFileLocatorService',
             'filesystem' => 'getFilesystemService',
+            'film_service' => 'getFilmServiceService',
             'form.csrf_provider' => 'getForm_CsrfProviderService',
             'form.factory' => 'getForm_FactoryService',
             'form.registry' => 'getForm_RegistryService',
@@ -273,10 +274,13 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_AssetManagerService()
     {
+        $a = $this->get('templating.loader');
+
         $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('config' => new \Symfony\Bundle\AsseticBundle\Factory\Loader\ConfigurationLoader(), 'twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig')), new \Assetic\Cache\ConfigCache('/home/apedan/projects/start-symfony/app/cache/dev/assetic/config'), true)));
 
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\ConfigurationResource(array('bootstrap_css' => array(0 => array(0 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/less/bootstrap.less', 1 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/less/responsive.less'), 1 => array(0 => 'lessphp', 1 => 'cssrewrite'), 2 => array('output' => '/css/bootstrap.css')), 'bootstrap_js' => array(0 => array(0 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-transition.js', 1 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-alert.js', 2 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-button.js', 3 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-carousel.js', 4 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-collapse.js', 5 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-dropdown.js', 6 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-modal.js', 7 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-tooltip.js', 8 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-popover.js', 9 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-scrollspy.js', 10 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-tab.js', 11 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-typeahead.js', 12 => '/home/apedan/projects/start-symfony/app/../vendor/twbs/bootstrap/js/bootstrap-affix.js'), 1 => array(), 2 => array('output' => '/js/bootstrap.js')), 'jquery' => array(0 => array(0 => '/home/apedan/projects/start-symfony/app/../vendor/jquery/jquery/jquery-1.9.1.js'), 1 => array(), 2 => array('output' => '/js/jquery.js')))), 'config');
-        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($this->get('templating.loader'), '', '/home/apedan/projects/start-symfony/app/Resources/views', '/\\.[^.]+\\.twig$/'), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FilmBundle', '/home/apedan/projects/start-symfony/app/Resources/FilmBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FilmBundle', '/home/apedan/projects/start-symfony/src/Film/Bundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, '', '/home/apedan/projects/start-symfony/app/Resources/views', '/\\.[^.]+\\.twig$/'), 'twig');
 
         return $instance;
     }
@@ -735,6 +739,19 @@ class appDevDebugProjectContainer extends Container
     protected function getFilesystemService()
     {
         return $this->services['filesystem'] = new \Symfony\Component\Filesystem\Filesystem();
+    }
+
+    /**
+     * Gets the 'film_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Film\Bundle\FilmService A Film\Bundle\FilmService instance.
+     */
+    protected function getFilmServiceService()
+    {
+        return $this->services['film_service'] = new \Film\Bundle\FilmService(NULL);
     }
 
     /**
@@ -2868,7 +2885,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\HttpKernelExtension($this->get('fragment.handler')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer(new \Symfony\Bridge\Twig\Form\TwigRendererEngine(array(0 => 'form_div_layout.html.twig', 1 => 'BcBootstrapBundle:Form:form_div_layout.html.twig')), $this->get('form.csrf_provider', ContainerInterface::NULL_ON_INVALID_REFERENCE))));
         $instance->addExtension(new \Twig_Extension_Debug());
-        $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), $this->get('templating.name_parser'), true, array(), array(), $this->get('assetic.value_supplier.default', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
+        $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), $this->get('templating.name_parser'), true, array(), array(0 => 'FilmBundle'), $this->get('assetic.value_supplier.default', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
         $instance->addExtension(new \Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension());
         $instance->addExtension($this->get('bc_bootstrap.twig.icon_extension'));
         $instance->addExtension($this->get('bc_bootstrap.twig.label_extension'));
@@ -3740,7 +3757,7 @@ class appDevDebugProjectContainer extends Container
             ),
             'assetic.cache_dir' => '/home/apedan/projects/start-symfony/app/cache/dev/assetic',
             'assetic.bundles' => array(
-
+                0 => 'FilmBundle',
             ),
             'assetic.twig_extension.class' => 'Symfony\\Bundle\\AsseticBundle\\Twig\\AsseticExtension',
             'assetic.twig_formula_loader.class' => 'Assetic\\Extension\\Twig\\TwigFormulaLoader',
