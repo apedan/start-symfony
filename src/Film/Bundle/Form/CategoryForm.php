@@ -17,8 +17,8 @@ class CategoryForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Film\Bundle\Entity\Category',
-            'cascade_validation' => true,
+            'data_class'            => 'Film\Bundle\Entity\Category',
+            'cascade_validation'    => true,
         ));
     }
 

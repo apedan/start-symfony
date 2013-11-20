@@ -52,9 +52,23 @@ class Film
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="releaseAt", type="datetime")
+     * @ORM\Column(name="releaseWorldAt", type="datetime", nullable=true)
      */
-    private $releaseAt;
+    private $releaseWorldAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="releaseRuAt", type="datetime", nullable=true)
+     */
+    private $releaseRuAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="releaseUaAt", type="datetime", nullable=true)
+     */
+    private $releaseUaAt;
 
     /**
      * @ORM\ManyToMany(targetEntity="Genre")
@@ -66,7 +80,7 @@ class Film
     private $genres;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Actor")
+     * @ORM\ManyToMany(targetEntity="Actor", cascade={"persist"})
      * @ORM\JoinTable(name="films_actors",
      *      joinColumns={@ORM\JoinColumn(name="film_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="actor_id", referencedColumnName="id")}
@@ -75,17 +89,18 @@ class Film
     private $actors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="films")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="films", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
 
 
-    public function __construct() {
-        $this->created = new \DateTime();
-        $this->updated = new \DateTime();
-        $this->genres = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->actors = new \Doctrine\Common\Collections\ArrayCollection();
+    public function __construct()
+    {
+        $this->created  = new \DateTime();
+        $this->updated  = new \DateTime();
+        $this->genres   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->actors   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function populate($data = array())
@@ -200,29 +215,6 @@ class Film
     }
 
     /**
-     * Set releaseAt
-     *
-     * @param \DateTime $releaseAt
-     * @return Film
-     */
-    public function setReleaseAt($releaseAt)
-    {
-        $this->releaseAt = $releaseAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get releaseAt
-     *
-     * @return \DateTime 
-     */
-    public function getReleaseAt()
-    {
-        return $this->releaseAt;
-    }
-
-    /**
      * @param Category $category
      */
     public function setCategory(Category $category)
@@ -254,4 +246,51 @@ class Film
         return $this->actors;
     }
 
+    /**
+     * @param \DateTime $releaseRuAt
+     */
+    public function setReleaseRuAt($releaseRuAt)
+    {
+        $this->releaseRuAt = $releaseRuAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReleaseRuAt()
+    {
+        return $this->releaseRuAt;
+    }
+
+    /**
+     * @param \DateTime $releaseUaAt
+     */
+    public function setReleaseUaAt($releaseUaAt)
+    {
+        $this->releaseUaAt = $releaseUaAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReleaseUaAt()
+    {
+        return $this->releaseUaAt;
+    }
+
+    /**
+     * @param \DateTime $releaseWorldAt
+     */
+    public function setReleaseWorldAt($releaseWorldAt)
+    {
+        $this->releaseWorldAt = $releaseWorldAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReleaseWorldAt()
+    {
+        return $this->releaseWorldAt;
+    }
 }

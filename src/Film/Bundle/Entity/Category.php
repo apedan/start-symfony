@@ -33,7 +33,8 @@ class Category
      */
     private $films;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->films = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

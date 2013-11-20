@@ -19,9 +19,9 @@
     </div>
 
     <div>
-        {{ form_label(form.category) }}
-        {{ form_errors(form.category) }}
-        {{ form_widget(form.category) }}
+        {{ form_label(form.category.title) }}
+        {{ form_errors(form.category.title) }}
+        {{ form_widget(form.category.title) }}
     </div>
 
     <div>
@@ -30,22 +30,49 @@
         {{ form_widget(form.genres) }}
     </div>
 
-    <div>
-        {{ form_label(form.actors) }}
-        {{ form_errors(form.actors) }}
-        {{ form_widget(form.actors) }}
-    </div>
+    <ul id="actors-fields-list" data-prototype="
+        {{ form_widget(form.actors.vars.prototype.name) | e }}
+        {{ form_widget(form.actors.vars.prototype.birthDate) | e }}
+    ">
+        {% for actorField in form.actors %}
+            <li>
+                {{ form_errors(actorField) }}
+                {{ form_widget(actorField) }}
+            </li>
+        {% endfor %}
+    </ul>
 
-    <div>
-        {{ form_label(form.releaseAt) }}
-        {{ form_errors(form.releaseAt) }}
-        {{ form_widget(form.releaseAt) }}
-    </div>
+    <a href="#" id="add-another-actor">Add another actor</a>
 
     <div>
         {{ form_widget(form.submit) }}
     </div>
 
-    {{ form_rest(form) }}
     {{ form_end(form) }}
+
+    <script type="text/javascript">
+        // keep track of how many email fields have been rendered
+        var actorsCount = '{{ form.actors | length }}';
+
+        jQuery(document).ready(function() {
+            jQuery('#add-another-actor').click(function() {
+                var actorList = jQuery('#actors-fields-list');
+
+                // grab the prototype template
+                var newWidget = actorList.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                newWidget = newWidget.replace(/__name__/g, actorsCount);
+                actorsCount++;
+
+                // create a new list element and add it to the list
+                var newLi = jQuery('<li></li>').html(newWidget);
+                newLi.appendTo(jQuery('#actors-fields-list'));
+
+                return false;
+            });
+        })
+    </script>
+
 {% endblock %}

@@ -15,6 +15,7 @@ class GenreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $genres = $em->getRepository('Film\Bundle\Entity\Genre')->findAll();
+
         return $this->render('FilmBundle:Genre:genres.html.twig', array(
             'genres' => $genres,
         ));
@@ -33,18 +34,16 @@ class GenreController extends Controller
             'action' => $this->generateUrl('genre_create'),
             'method' => 'POST',
         ));
-
-        if($request->getMethod() == 'POST'){
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 $em->persist($genre);
                 $em->flush();
-
                 $this->get('session')->getFlashBag()->add(
                     'notice',
                     'Your genre was saved!'
                 );
+
                 return $this->redirect($this->generateUrl('genre_homepage'));
             }
         }

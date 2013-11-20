@@ -17,7 +17,7 @@ class GenreForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Film\Bundle\Entity\Genre',
+            'data_class'         => 'Film\Bundle\Entity\Genre',
             'cascade_validation' => true,
         ));
     }

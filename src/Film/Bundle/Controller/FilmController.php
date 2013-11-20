@@ -15,6 +15,7 @@ class FilmController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $films = $em->getRepository('Film\Bundle\Entity\Film')->findAll();
+
         return $this->render('FilmBundle:Film:films.html.twig', array(
             'films' => $films,
         ));
@@ -34,17 +35,16 @@ class FilmController extends Controller
             'method' => 'POST',
         ));
 
-        if($request->getMethod() == 'POST'){
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 $em->persist($film);
                 $em->flush();
-
                 $this->get('session')->getFlashBag()->add(
                     'notice',
                     'Your film was saved!'
                 );
+
                 return $this->redirect($this->generateUrl('film_homepage'));
             }
         }

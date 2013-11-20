@@ -15,6 +15,7 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $categories = $em->getRepository('Film\Bundle\Entity\Category')->findAll();
+
         return $this->render('FilmBundle:Category:categories.html.twig', array(
             'categories' => $categories,
         ));
@@ -33,18 +34,16 @@ class CategoryController extends Controller
             'action' => $this->generateUrl('category_create'),
             'method' => 'POST',
         ));
-
-        if($request->getMethod() == 'POST'){
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 $em->persist($category);
                 $em->flush();
-
                 $this->get('session')->getFlashBag()->add(
                     'notice',
                     'Your category was saved!'
                 );
+
                 return $this->redirect($this->generateUrl('category_homepage'));
             }
         }

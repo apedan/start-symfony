@@ -15,6 +15,7 @@ class ActorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $actors = $em->getRepository('Film\Bundle\Entity\Actor')->findAll();
+
         return $this->render('FilmBundle:Actor:actors.html.twig', array(
             'actors' => $actors,
         ));
@@ -34,17 +35,16 @@ class ActorController extends Controller
             'method' => 'POST',
         ));
 
-        if($request->getMethod() == 'POST'){
+        if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 $em->persist($actor);
                 $em->flush();
-
                 $this->get('session')->getFlashBag()->add(
                     'notice',
                     'Your actor was saved!'
                 );
+
                 return $this->redirect($this->generateUrl('actor_homepage'));
             }
         }
