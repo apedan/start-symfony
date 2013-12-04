@@ -3,7 +3,6 @@
 namespace Film\Bundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Film\Bundle\Entity\Log;
 
 class LogEvent extends Event
 {
@@ -21,12 +20,6 @@ class LogEvent extends Event
         $this->entity = $entity;
         $this->type = $type;
         $this->mesage = $message;
-    }
-
-    public function persistLog(Log $log)
-    {
-        var_dump($log);
-        $this->em->persist($log);
     }
 
     public function getEntity()
@@ -48,5 +41,13 @@ class LogEvent extends Event
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntityManager()
+    {
+        return $this->em;
     }
 }
