@@ -16,5 +16,8 @@
         <service id="filmService" class="%film.service.class%">
             <argument type="service" id="film.repository"/>
         </service>
+        <service id="log.writer" class="Film\Bundle\LogWriter">
+            <tag name="doctrine.event_listener" event="film.event.create" method="write" />
+        </service>
     </services>
 </container>

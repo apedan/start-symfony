@@ -5,7 +5,10 @@ namespace Film\Bundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Film\Bundle\Form\FilmForm;
 use Film\Bundle\Entity\Film;
+use Film\Bundle\Entity\Log;
 use Film\Bundle\FilmService;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Film\Bundle\Event\LogEvent;
 
 class FilmController extends Controller
 {
@@ -45,7 +48,12 @@ class FilmController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $em->persist($film);
+
+                $event = new LogEvent($em, $film, Log::TYPE_INFO, 'film was created');
+                $dispatcher = $this->get('event_dispatcher');
+                $dispatcher->dispatch('film.event.create', $event);
                 $em->flush();
+
                 $this->get('session')->getFlashBag()->add(
                     'notice',
                     'Your film was saved!'

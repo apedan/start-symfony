@@ -69,7 +69,8 @@ class appDevDebugProjectContainer extends Container
             'event_dispatcher' => 'getEventDispatcherService',
             'file_locator' => 'getFileLocatorService',
             'filesystem' => 'getFilesystemService',
-            'film_service' => 'getFilmServiceService',
+            'film.repository' => 'getFilm_RepositoryService',
+            'filmservice' => 'getFilmserviceService',
             'form.csrf_provider' => 'getForm_CsrfProviderService',
             'form.factory' => 'getForm_FactoryService',
             'form.registry' => 'getForm_RegistryService',
@@ -119,6 +120,7 @@ class appDevDebugProjectContainer extends Container
             'http_kernel' => 'getHttpKernelService',
             'kernel' => 'getKernelService',
             'locale_listener' => 'getLocaleListenerService',
+            'log.writer' => 'getLog_WriterService',
             'logger' => 'getLoggerService',
             'monolog.handler.chromephp' => 'getMonolog_Handler_ChromephpService',
             'monolog.handler.debug' => 'getMonolog_Handler_DebugService',
@@ -587,7 +589,10 @@ class appDevDebugProjectContainer extends Container
         $b = new \Doctrine\DBAL\Configuration();
         $b->setSQLLogger($a);
 
-        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'sf_guest_book', 'host' => '127.0.0.1', 'port' => NULL, 'user' => 'root', 'password' => NULL, 'charset' => 'UTF8', 'driver' => 'pdo_mysql', 'driverOptions' => array()), $b, new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this), array());
+        $c = new \Symfony\Bridge\Doctrine\ContainerAwareEventManager($this);
+        $c->addEventListener(array(0 => 'film.event.create'), $this->get('log.writer'));
+
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'sf_guest_book', 'host' => '127.0.0.1', 'port' => NULL, 'user' => 'root', 'password' => NULL, 'charset' => 'UTF8', 'driver' => 'pdo_mysql', 'driverOptions' => array()), $b, $c, array());
     }
 
     /**
@@ -742,16 +747,29 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'film_service' service.
+     * Gets the 'film.repository' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Film\Bundle\Entity\FilmRepository A Film\Bundle\Entity\FilmRepository instance.
+     */
+    protected function getFilm_RepositoryService()
+    {
+        return $this->services['film.repository'] = $this->get('doctrine.orm.default_entity_manager')->getRepository('Film\\Bundle\\Entity\\Film');
+    }
+
+    /**
+     * Gets the 'filmservice' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
      * @return Film\Bundle\FilmService A Film\Bundle\FilmService instance.
      */
-    protected function getFilmServiceService()
+    protected function getFilmserviceService()
     {
-        return $this->services['film_service'] = new \Film\Bundle\FilmService(NULL);
+        return $this->services['filmservice'] = new \Film\Bundle\FilmService($this->get('film.repository'));
     }
 
     /**
@@ -1407,6 +1425,19 @@ class appDevDebugProjectContainer extends Container
         $instance->setRequest($this->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE));
 
         return $instance;
+    }
+
+    /**
+     * Gets the 'log.writer' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Film\Bundle\LogWriter A Film\Bundle\LogWriter instance.
+     */
+    protected function getLog_WriterService()
+    {
+        return $this->services['log.writer'] = new \Film\Bundle\LogWriter();
     }
 
     /**
@@ -3862,6 +3893,9 @@ class appDevDebugProjectContainer extends Container
             'sensio_framework_extra.converter.doctrine.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
             'sensio_framework_extra.converter.datetime.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
             'sensio_framework_extra.view.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+            'film.repository.class' => 'Film\\Bundle\\Entity\\FilmRepository',
+            'film.entity.class' => 'Film\\Bundle\\Entity\\Film',
+            'film.service.class' => 'Film\\Bundle\\FilmService',
             'web_profiler.controller.profiler.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController',
             'web_profiler.controller.router.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\RouterController',
             'web_profiler.controller.exception.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ExceptionController',
