@@ -19,6 +19,8 @@ class AppKernel extends Kernel
             new Learn\Bundle\GBookBundle\GBookBundle(),
             new Bc\Bundle\BootstrapBundle\BcBootstrapBundle(),
             new Film\Bundle\FilmBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

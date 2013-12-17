@@ -48,6 +48,7 @@ class FilmController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $em->persist($film);
+                $em->flush();
 
                 $event = new LogEvent($em, $film, Log::TYPE_INFO, 'film was created');
                 $dispatcher = $this->get('event_dispatcher');

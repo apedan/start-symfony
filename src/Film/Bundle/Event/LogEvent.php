@@ -19,7 +19,7 @@ class LogEvent extends Event
         $this->em = $em;
         $this->entity = $entity;
         $this->type = $type;
-        $this->mesage = $message;
+        $this->message = $message;
     }
 
     public function getEntity()

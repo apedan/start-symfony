@@ -24,6 +24,7 @@
         "symfony/symfony": "2.3.*",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
         "twig/extensions": "1.0.*",
         "symfony/assetic-bundle": "2.3.*",
         "symfony/swiftmailer-bundle": "2.3.*",
@@ -35,7 +36,8 @@
         "braincrafted/bootstrap-bundle": "dev-master",
         "leafo/lessphp": "dev-master",
         "twbs/bootstrap": "2.3.*",
-        "jquery/jquery": "1.9.*"
+        "jquery/jquery": "1.9.*",
+        "stof/doctrine-extensions-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
