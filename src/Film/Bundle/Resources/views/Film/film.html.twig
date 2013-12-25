@@ -1,0 +1,19 @@
+{% extends 'FilmBundle::layout.html.twig' %}
+
+{% block content %}
+                <div>
+                    <h2>{{ film.title }}</h2>
+                    <div>Description: {{ film.description }}</div>
+                    <div><a href='{{ path('film_search', {'category': film.category.id}) }}'>{{ film.category.title }}</a></div>
+                    <div>Genres:
+                        {% for genre in film.genres %}
+                            <div>{{ genre.title }}</div>
+                        {% endfor %}
+                    </div>
+                    <div>Actors:
+                        {% for actor in film.actors %}
+                            <div>{{ actor.name }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+{% endblock %}

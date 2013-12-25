@@ -18,11 +18,11 @@
         {{ form_widget(form.description) }}
     </div>
 
-    <div>
-        {{ form_label(form.category.title) }}
-        {{ form_errors(form.category.title) }}
-        {{ form_widget(form.category.title) }}
-    </div>
+    {#<div>#}
+        {#{{ form_label(form.category.title) }}#}
+        {#{{ form_errors(form.category.title) }}#}
+        {#{{ form_widget(form.category.title) }}#}
+    {#</div>#}
 
     <div>
         {{ form_label(form.genres) }}
@@ -31,7 +31,10 @@
     </div>
 
     <ul id="actors-fields-list" data-prototype="
+        {{ form_label(form.actors.vars.prototype.name) | e }}
         {{ form_widget(form.actors.vars.prototype.name) | e }}
+
+        {{ form_label(form.actors.vars.prototype.birthDate) | e }}
         {{ form_widget(form.actors.vars.prototype.birthDate) | e }}
     ">
         {% for actorField in form.actors %}
@@ -48,7 +51,7 @@
         {{ form_widget(form.submit) }}
     </div>
 
-    {{ form_end(form) }}
+    {#{{ form_end(form) }}#}
 
     <script type="text/javascript">
         // keep track of how many email fields have been rendered

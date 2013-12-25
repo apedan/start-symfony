@@ -42,6 +42,7 @@ class FilmController extends Controller
         $form = $this->createForm(new FilmForm(), $film, array(
             'action' => $this->generateUrl('film_create'),
             'method' => 'POST',
+            'em'     => $em,
         ));
 
         if ('POST' == $request->getMethod()) {
@@ -84,6 +85,23 @@ class FilmController extends Controller
         return $this->render('FilmBundle:Film:films.html.twig', array(
             'params' => $requestParams,
             'films' => $films,
+        ));
+    }
+
+    /**
+     * @param $slug
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function filmAction($slug)
+    {
+        $film = $this->getFilmService()->getFilmBySlug($slug);
+        if (!$film) {
+            throw $this->createNotFoundException('The film does not exist');
+        }
+
+        return $this->render('FilmBundle:Film:film.html.twig', array(
+            'film' => $film,
         ));
     }
 }

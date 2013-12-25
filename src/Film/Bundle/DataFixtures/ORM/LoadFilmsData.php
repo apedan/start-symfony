@@ -2,6 +2,9 @@
 
 namespace Film\Bundle\DataFixtures\ORM;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Film\Bundle\Entity\Category;
@@ -9,8 +12,19 @@ use Film\Bundle\Entity\Actor;
 use Film\Bundle\Entity\Film;
 use Film\Bundle\Entity\Genre;
 
-class LoadFilmsData implements FixtureInterface
+class LoadFilmsData implements FixtureInterface, ContainerAwareInterface
 {
+    protected $categoryManager;
+    protected $actorManager;
+    protected $genreManager;
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->categoryManager = $container->get('category.repository');
+        $this->actorManager = $container->get('actor.repository');
+        $this->genreManager = $container->get('genre.repository');
+    }
+
     public function load(ObjectManager $manager)
     {
         $this->loadCategories($manager);
@@ -107,15 +121,18 @@ class LoadFilmsData implements FixtureInterface
 
     protected function loadFilms($manager)
     {
-//        $categoryRepository = $this->get('category.repository');
-//        $genreRepository = $manager->getRepository('genre.repository');
-//        $actorRepository = $manager->getRepository('actor.repository');
-
         $film = new Film();
         $film->setTitle('Джек Ричер');
         $film->setReleaseWorldAt(new \DateTime('2013-04-20'));
         $film->setDescription('По роману «Выстрел» британского писателя Ли Чайлда. Снайпер убивает пять случайных прохожих, но все улики указывают на человека, заключенного под стражу. На допросе подозреваемый умоляет об одном - найти Джека Ричера.');
-//        $film->setCategory($categoryRepository->findOneBy(array('id' => 1)));
+        $film->setCategory($this->categoryManager->findOneBy(array('id' => 1)));
+
+        $actor = $this->actorManager->findOneBy(array('id' => 1));
+        $film->getActors()->add($actor);
+
+        $genre = $this->genreManager->findOneBy(array('id' => 1));
+        $film->getGenres()->add($genre);
+
         $manager->persist($film);
 
         $manager->flush();

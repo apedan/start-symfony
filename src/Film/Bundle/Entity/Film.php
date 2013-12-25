@@ -3,6 +3,7 @@
 namespace Film\Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Film
@@ -29,6 +30,12 @@ class Film
     private $title;
 
     /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")
@@ -36,16 +43,18 @@ class Film
     private $description;
 
     /**
-     * @var \DateTime
+     * @var \DateTime $created
      *
-     * @ORM\Column(name="created", type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
      */
     private $created;
 
     /**
-     * @var \DateTime
+     * @var \DateTime $updated
      *
-     * @ORM\Column(name="updated", type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
      */
     private $updated;
 
@@ -292,5 +301,13 @@ class Film
     public function getReleaseWorldAt()
     {
         return $this->releaseWorldAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

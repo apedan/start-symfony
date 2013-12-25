@@ -6,6 +6,7 @@ use Doctrine\Tests\ORM\Tools\Pagination\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Film\Bundle\Form\DataTransformer\ActorsToArrayCollection;
 
 class FilmForm extends AbstractType
 {
@@ -30,12 +31,24 @@ class FilmForm extends AbstractType
 //            'multiple'  => true,
 //        ));
 
-        $builder->add('actors', 'collection', array(
-            'type'         => new ActorForm(),
-            'allow_add'    => true,
-            'allow_delete' => true,
-            'prototype'    => true,
-        ));
+        $entityManager = $options['em'];
+        $transformer = new ActorsToArrayCollection($entityManager);
+
+        $builder->add(
+            $builder->create('actors', 'collection', array(
+                'type'         => new ActorForm(),
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'prototype'    => true,
+            ))->addModelTransformer($transformer)
+        );
+
+//        $builder->add('actors', 'collection', array(
+//            'type'         => new ActorForm(),
+//            'allow_add'    => true,
+//            'allow_delete' => true,
+//            'prototype'    => true,
+//        ));
 
         $builder->add('category', new CategoryForm());
 
@@ -44,10 +57,17 @@ class FilmForm extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver
+            ->setDefaults(array(
             'data_class'            => 'Film\Bundle\Entity\Film',
             'cascade_validation'    => true,
-        ));
+            ))
+            ->setRequired(array(
+                'em',
+            ))
+            ->setAllowedTypes(array(
+                'em' => 'Doctrine\Common\Persistence\ObjectManager',
+            ));
     }
 
     public function getName()

@@ -21,6 +21,11 @@ class FilmService
         return $this->filmRepository->findAll();
     }
 
+    public function getFilmBySlug($slug)
+    {
+        return $this->filmRepository->findOneBy(array('slug' => $slug));
+    }
+
     public function getFilmsByParams(Array $params)
     {
         return $this->filmRepository->getFilmsByParams($params);
