@@ -32,8 +32,7 @@ class WsseListener implements ListenerInterface
 
         $wsseRegex = '/UsernameToken Username="([^"]+)", PasswordDigest="([^"]+)", Nonce="([^"]+)", Created="([^"]+)"/';
         if (!$request->headers->has('x-wsse') || 1 !== preg_match($wsseRegex, $request->headers->get('x-wsse'), $matches)) {
-            var_dump($request->headers->get('x-wsse'));
-            die();
+
             return;
         }
 
@@ -62,14 +61,14 @@ class WsseListener implements ListenerInterface
 
             // Deny authentication with a '403 Forbidden' HTTP response
             $response = new Response();
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            $response->setStatusCode(403);
             $event->setResponse($response);
 
         }
 
         // By default deny authorization
         $response = new Response();
-        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        $response->setStatusCode(403);
         $event->setResponse($response);
     }
 }
