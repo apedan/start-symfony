@@ -36,5 +36,18 @@
         <service id="log.writer" class="Film\Bundle\LogWriter">
             <tag name="kernel.event_listener" event="film.event.create" method="write" />
         </service>
+
+        <service id="wsse.security.authentication.provider"
+                 class="Film\Bundle\Security\Authentication\Provider\WsseProvider" public="false">
+            <argument /> <!-- User Provider -->
+            <argument>%kernel.cache_dir%/security/nonces</argument>
+        </service>
+
+        <service id="wsse.security.authentication.listener"
+                 class="Film\Bundle\Security\Firewall\WsseListener" public="false">
+            <argument type="service" id="security.context"/>
+            <argument type="service" id="security.authentication.manager" />
+        </service>
+
     </services>
 </container>
