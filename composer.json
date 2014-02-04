@@ -37,7 +37,8 @@
         "leafo/lessphp": "dev-master",
         "twbs/bootstrap": "2.3.*",
         "jquery/jquery": "1.9.*",
-        "stof/doctrine-extensions-bundle": "dev-master"
+        "stof/doctrine-extensions-bundle": "dev-master",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "scripts": {
         "post-install-cmd": [
