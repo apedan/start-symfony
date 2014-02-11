@@ -4,7 +4,7 @@ Symfony Standard Edition Upgrade
 From Symfony 2.0 to Symfony 2.1
 -------------------------------
 
-### Project Dependencies
+### Project Dependencies33
 
 As of Symfony 2.1, project dependencies are managed by
 [Composer](http://getcomposer.org/):
